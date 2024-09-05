@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: JournalEase
+  data:
+      mongodb:
+        database: journaleasedb
+        port: 27017
+        host: localhost
+        auto-index-creation: true
+
