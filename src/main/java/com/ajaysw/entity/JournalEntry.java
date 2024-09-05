@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Document(collection = "journal_entries")
 public class JournalEntry {
 
