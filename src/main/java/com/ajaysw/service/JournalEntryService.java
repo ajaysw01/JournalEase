@@ -3,6 +3,7 @@ package com.ajaysw.service;
 import com.ajaysw.entity.JournalEntry;
 import com.ajaysw.entity.User;
 import com.ajaysw.repo.JournalEntryRepository;
+import com.ajaysw.repo.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class JournalEntryService {
     private JournalEntryRepository  journalEntryRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String userName){
@@ -47,14 +50,29 @@ public class JournalEntryService {
         return journalEntryRepository.findById(id);
     }
 
+    @Transactional
+    public boolean deleteById(ObjectId id, String userName){
 
-    public void deleteById(ObjectId id, String userName){
-        User user = userService.findByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userService.saveUser(user);
-        journalEntryRepository.deleteById(id);
+        boolean removed = false;
+        try {
+
+           User user = userService.findByUserName(userName);
+           removed =  user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+           if(removed){
+               userService.saveUser(user);
+               journalEntryRepository.deleteById(id);
+           }
+
+
+       }catch (Exception e){
+           System.out.println(e.getMessage());
+           throw  new RuntimeException("An error occurred while deleting journal entry");
+       }
+        return  removed;
     }
 
-
+    public List<JournalEntry> findByUserName(String userName){
+        return  null;
+    }
 
 }
