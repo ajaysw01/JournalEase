@@ -3,3 +3,8 @@ spring:
     name: JournalEase
   profiles:
     active: dev
+
+
+logging:
+  level:
+    root: WARN

@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,42 +25,33 @@ public class UserController {
     @Autowired
     private WeatherService weatherService;
 
-    @PutMapping()
-    public ResponseEntity<?> updateUser(@RequestBody User user){
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
         userInDb.setUserName(user.getUserName());
         userInDb.setPassword(user.getPassword());
-        userService.saveNewUSer(userInDb);
-        return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        userService.saveNewUser(userInDb);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deleteByUserId(@RequestBody User user){
+    @DeleteMapping
+    public ResponseEntity<?> deleteUserById() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userRepository.deleteByUserName(authentication.getName());
-        return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @GetMapping("/greetings")
-    public ResponseEntity<?> greetings() {
+
+    @GetMapping
+    public ResponseEntity<?> greeting() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
-
-        String greeting = "Hi " + authentication.getName();
-
-        if (weatherResponse != null && weatherResponse.getCurrent() != null) {
-            // Log the entire weather response for debugging
-            System.out.println("WeatherResponse: " + weatherResponse);
-            System.out.println("Current Weather: " + weatherResponse.getCurrent());
-
-            greeting += ", Weather Feels Like: " + weatherResponse.getCurrent().getFeelslike();
-        } else {
-            greeting += ", Weather data is unavailable at the moment.";
+        String greeting = "";
+        if (weatherResponse != null) {
+            greeting = ", Weather feels like " + weatherResponse.getCurrent().getFeelslike();
         }
-
-        return new ResponseEntity<>(greeting, HttpStatus.OK);
+        return new ResponseEntity<>("Hi " + authentication.getName() + greeting, HttpStatus.OK);
     }
-
 
 }

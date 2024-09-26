@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+
     @Autowired
     private UserService userService;
 
@@ -20,25 +21,21 @@ public class AdminController {
     private AppCache appCache;
 
     @GetMapping("/all-users")
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> allUsers = userService.getAllUsers();
-        if(allUsers != null && !allUsers.isEmpty()){
-            return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    public ResponseEntity<?> getAllUsers() {
+        List<User> all = userService.getAll();
+        if (all != null && !all.isEmpty()) {
+            return new ResponseEntity<>(all, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/create-admin")
-    public void createAdmin(@RequestBody User user){
+    @PostMapping("/create-admin-user")
+    public void createUser(@RequestBody User user) {
         userService.saveAdmin(user);
     }
 
-    @GetMapping("clear-cache")
+    @GetMapping("clear-app-cache")
     public void clearAppCache(){
         appCache.init();
     }
-
-
-
-
 }

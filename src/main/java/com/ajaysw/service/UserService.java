@@ -2,6 +2,7 @@ package com.ajaysw.service;
 
 import com.ajaysw.entity.User;
 import com.ajaysw.repo.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,22 +14,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService {
-
-
     @Autowired
     private UserRepository userRepository;
 
-    private static final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void saveNewUSer(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER"));
-        userRepository.save(user);
+    public boolean saveNewUser(User user) {
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            log.trace("hahahhahhahahahah");
+            return false;
+        }
     }
+
     public void saveAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER","ADMIN"));
+        user.setRoles(Arrays.asList("USER", "ADMIN"));
         userRepository.save(user);
     }
 
@@ -36,19 +43,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(ObjectId id) {
+    public Optional<User> findById(ObjectId id) {
         return userRepository.findById(id);
     }
 
-    public void deleteUser(ObjectId id) {
+    public void deleteById(ObjectId id) {
         userRepository.deleteById(id);
     }
 
     public User findByUserName(String userName) {
-        return  userRepository.findByUserName(userName);
+        return userRepository.findByUserName(userName);
     }
 }
