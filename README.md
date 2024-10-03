@@ -1,6 +1,6 @@
-# JournalEAse
+# JournalEase
 
-A backend journal application built using **Spring Boot**, **JWT**, **Spring Security**, **MongoDB Atlas**, and **Redis**. This app allows users to securely create, read, update, and delete journal entries, manage their profiles, view current weather conditions, and includes admin functionality for managing users and cache.
+A backend journal application built using **Spring Boot**, **JWT**, **Spring Security**, **MongoDB Atlas**, **Redis**, and **Kafka**. This app allows users to securely create, read, update, and delete journal entries, manage their profiles, view current weather conditions, and includes admin functionality for managing users and cache. The app also integrates **Kafka** for message streaming and processing.
 
 ## Features
 
@@ -13,11 +13,15 @@ A backend journal application built using **Spring Boot**, **JWT**, **Spring Sec
 ### Admin Features
 - **User Management**: View all registered users and create new admin accounts.
 - **Cache Management**: Clear application cache using Redis for improved performance.
+  
+### Kafka Integration
+- **Message Streaming**: Kafka is used to stream important user or journal events within the system for further processing or analytics.
 
 ## API Endpoints
 
 ### Public Endpoints
-- `POST /public/create-user`: Create a new user.
+- `POST /public/signup`: Create a new user.
+- `POST /public/login`: login a  user.
 - `GET /public/health`: Check application health.
 
 ### User Endpoints
@@ -41,21 +45,62 @@ A backend journal application built using **Spring Boot**, **JWT**, **Spring Sec
 - **Spring Security**: Security framework for authentication and authorization.
 - **MongoDB Atlas**: Cloud-hosted NoSQL database for storing user and journal data.
 - **Redis**: Caching service for faster access to frequently requested data.
+- **Kafka**: Message streaming platform used for processing system events.
 - **Weather API**: External API integration to provide real-time weather data.
 
 ## Getting Started
 
 ### Prerequisites
-- Java 8+
-- MongoDB Atlas account
-- Redis installed or using a Redis cloud service
-- Maven for building the project
+- **Java 8+**
+- **MongoDB Atlas** account
+- **Redis** installed or using a Redis cloud service
+- **Kafka** installed and running on your local environment or using a managed Kafka service
+- **Maven** for building the project
 
+### Installation and Setup
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/ajaysw01/JournalEase.git
+   ```
+
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd JournalEase
+   ```
+
+3. **Configure MongoDB Atlas** in the `application.properties`:
+   ```properties
+   spring.data.mongodb.uri=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+   ```
+
+4. **Configure Redis** in the `application.properties`:
+   ```properties
+   spring.redis.host=localhost
+   spring.redis.port=6379
+   ```
+
+5. **Configure Kafka** in the `application.properties`:
+   ```properties
+   spring.kafka.bootstrap-servers=localhost:9092
+   ```
+
+6. **Build the Project Using Maven**:
+   ```bash
+   mvn clean install
+   ```
+
+7. **Run the Application**:
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ### Postman Testing
-You can use Postman to test the API by creating requests for each endpoint mentioned in the **API Endpoints** section.
+You can use **Postman** to test the API by creating requests for each endpoint mentioned in the **API Endpoints** section.
+
+### Kafka Setup
+Make sure Kafka is running locally or on a managed service, and configure the `bootstrap-servers` in your `application.properties`. You can download Kafka [here](https://kafka.apache.org/downloads).
 
 ## Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
 
-Happy journaling!
+Happy journaling
