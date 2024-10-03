@@ -16,16 +16,14 @@ import org.springframework.web.client.RestTemplate;
 public class JournalEaseApplication {
     public static void main(String[] args) {
         SpringApplication.run(JournalEaseApplication.class, args);
-
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
+    public PlatformTransactionManager falana(MongoDatabaseFactory dbFactory){
         return new MongoTransactionManager(dbFactory);
     }
-
     @Bean
     public RestTemplate restTemplate() {
-        return  new RestTemplate();
+        return new RestTemplate();
     }
 }

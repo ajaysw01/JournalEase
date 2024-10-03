@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WeatherService {
+
     @Value("${weather.api.key}")
     private String apiKey;
 
